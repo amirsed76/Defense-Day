@@ -12,3 +12,9 @@ def Register(request):
     return register
 
 
+class CreatePresenter(generics.CreateAPIView):
+    queryset = models.Presenter.objects.all()
+    serializer_class = serializers.PresnterSerializer
+
+
+
