@@ -21,3 +21,21 @@ class User(AbstractUser):
 
     class Meta:
         verbose_name = 'user'
+
+
+class Presenter(User):
+    supervisor = models.ForeignKey(User , related_name="SupervisorOfPresenter", on_delete=models.CASCADE)
+    class Meta:
+        verbose_name = 'Presenter'
+
+class RoleCoefficent(models.Model):
+    state = (
+        ('student', 'Student'),
+        ('presenter', 'Presenter'),
+        ('industry', 'Industry'),
+        ('supervisor', 'Supervisor'),
+        ('referee', 'Referee'),
+
+    )
+    role = models.CharField(max_length=20, choices=state)
+    coefficent = models.IntegerField()

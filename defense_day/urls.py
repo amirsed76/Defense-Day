@@ -21,5 +21,5 @@ from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('rest_registration.api.urls')),
-    # path('defense_day/',include("ui_defense_day.urls"))
+    path('defense_day/',include("ui_defense_day.urls"))
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
