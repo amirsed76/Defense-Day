@@ -29,6 +29,7 @@ class Presenter(models.Model):
     supervisor = models.ForeignKey(User , related_name="SupervisorOfPresenter", on_delete=models.CASCADE)
     file1=models.FileField(upload_to="document/",null=True , blank=True)
     file2=models.FileField(upload_to="document/",null=True , blank=True)
+    score = models.DecimalField(max_digits=4,decimal_places=2 , null=True , blank=True)
     class Meta:
         verbose_name = 'Presenter'
 
