@@ -20,10 +20,13 @@ class PresnterSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = models.Presenter
-        fields = ["username", "password", "phone_number"]
+        fields = ["username","supervisor", "password", "phone_number"]
 
     def create(self, validated_data):
-        return  models.Student.objects.create_user(username=validated_data["username"] , password=validated_data["password"] , role="presenter")
+
+        presenter= models.Presenter.objects.create_presenter(username=validated_data["username"] , password=validated_data["password"],job="presenter" , phone_number=validated_data["phone_number"] , supervisor=validated_data["supervisor"])
+        presenter.supervisor=validated_data["supervisor"]
+        return presenter
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -38,7 +41,7 @@ class StudentSerializer(serializers.ModelSerializer):
         fields = ["username","password","phone_number"]
 
     def create(self, validated_data):
-        return  models.Student.objects.create_user(username=validated_data["username"] , password=validated_data["password"],job="student")
+        return  models.Student.objects.create_user(username=validated_data["username"] , password=validated_data["password"],job="student" , phone_number=validated_data["phone_number"])
 
 
 class ProfessorSerializer(serializers.ModelSerializer):
@@ -54,7 +57,7 @@ class ProfessorSerializer(serializers.ModelSerializer):
         fields = ["username","password","phone_number"]
 
     def create(self, validated_data):
-        return  models.Student.objects.create_user(username=validated_data["username"] , password=validated_data["password"] ,role="professor")
+        return  models.Professor.objects.create_user(username=validated_data["username"] , password=validated_data["password"],job="professor" , phone_number=validated_data["phone_number"])
 
 
 

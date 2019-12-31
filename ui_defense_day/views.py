@@ -19,7 +19,7 @@ def Register(request):
         return register
 
 
-class CreatePresenter(generics.CreateAPIView , generics.UpdateAPIView , generics.DestroyAPIView):
+class Presenter_account(viewsets.ModelViewSet):
     queryset = models.Presenter.objects.all()
     serializer_class = serializers.PresnterSerializer
 

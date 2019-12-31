@@ -6,21 +6,34 @@ class UserManager(BaseUserManager):
 
     use_in_migrations = True
 
-    def create_user(self, username, email=None, password=None):
+    def create_user(self, username, email=None, password=None , job=None ,phone_number=None ):
         user = self.model(
             username=username,
-            # email=self.normalize_email(email)
+            job=job,
+            phone_number=phone_number
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
+    def create_presenter(self, username,supervisor, email=None, password=None , job=None ,phone_number=None ):
+        print("BBBBBBBB",supervisor)
+        user = self.model(
+            username=username,
+            job=job,
+            phone_number=phone_number,
+            supervisor=supervisor
+        )
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
     def create_superuser(self, username, email=None, password=None):
         user = self.create_user(
             username=username,
             email=email,
             password=password,
+            job="admin",
         )
         user.is_staff = True
         user.is_superuser = True
@@ -34,15 +47,15 @@ class User(AbstractUser):
     USERNAME_FIELD = 'username'
     objects = UserManager()
     phone_number=models.CharField(max_length=11 , null=True , blank=True)
-    # state = (
-    #     ('student', 'Student'),
-    #     ('industry', 'Industry'),
-    #     ('supervisor', 'Supervisor'),
-    #     ('referee', 'Referee'),
-    #     ('admin','Admin')
-    #
-    # )
-    # job=models.CharField(max_length=11,choices=state,default="student" , null=True , blank=True)
+    state = (
+        ('student', 'Student'),
+        ('industry', 'Industry'),
+        ('supervisor', 'Supervisor'),
+        ('referee', 'Referee'),
+        ('admin','Admin')
+
+    )
+    job=models.CharField(max_length=11,choices=state,default="student" , null=True , blank=True)
     REQUIRED_FIELDS = []
     def __str__(self):
         return '({})'.format(self.username)
