@@ -9,3 +9,5 @@ from django.contrib import admin
 admin.site.register(models.User)
 admin.site.register(models.Presenter)
 admin.site.register(models.RoleCoefficent)
+admin.site.register(models.Professor)
+admin.site.register(models.Student)

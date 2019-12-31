@@ -40,9 +40,15 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_registration',
-
+    'rest_framework.authtoken',
+    'rest_auth',
+    'allauth',
+    'rest_auth.registration',
+    'django.contrib.sites',
+    'allauth.account',
+    "corsheaders",
 ]
-
+SITE_ID=1
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -130,10 +136,30 @@ REST_REGISTRATION = {
     'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
 }
 
-AUTH_PROFILE_MODULE = "ui_defense_day.User"
-COGNITO_USER_MODEL = "ui_defense_day.User"
-AUTH_USER_MODEL = "ui_defense_day.User"
 
+AUTH_USER_MODEL = 'ui_defense_day.User'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+REST_AUTH_SERIALIZERS = {
+    "USER_DETAILS_SERIALIZER": "ui_defense_day.serializers.UserDetailsSerializer",
+}
+REST_AUTH_REGISTER_SERIALIZERS = {
+    "REGISTER_SERIALIZER": "ui_defense_day.serializers.UserRegisterSerializer",
+
+}
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
 MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    # 'DEFAULT_PERMISSION_CLASSES': (
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ),
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.LimitOffsetPagination'
+}
