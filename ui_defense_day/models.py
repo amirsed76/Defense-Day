@@ -6,23 +6,25 @@ class UserManager(BaseUserManager):
 
     use_in_migrations = True
 
-    def create_user(self, username, email=None, password=None , job=None ,phone_number=None ):
+    def create_user(self, username, email=None, password=None , job=None ,phone_number=None, name=None):
         user = self.model(
             username=username,
             job=job,
-            phone_number=phone_number
+            phone_number=phone_number,
+            name=name
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
 
-    def create_presenter(self, username,supervisor, email=None, password=None , job=None ,phone_number=None ):
+    def create_presenter(self, username,supervisor, email=None, password=None , job=None ,phone_number=None , name=None ):
         print("BBBBBBBB",supervisor)
         user = self.model(
             username=username,
             job=job,
             phone_number=phone_number,
-            supervisor=supervisor
+            supervisor=supervisor,
+            name=name
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -50,12 +52,12 @@ class User(AbstractUser):
     state = (
         ('student', 'Student'),
         ('industry', 'Industry'),
-        ('supervisor', 'Supervisor'),
         ('referee', 'Referee'),
         ('admin','Admin')
 
     )
     job=models.CharField(max_length=11,choices=state,default="student" , null=True , blank=True)
+    name=models.CharField(max_length=100, null=True , blank=True )
     REQUIRED_FIELDS = []
     def __str__(self):
         return '({})'.format(self.username)
@@ -79,6 +81,10 @@ class Presenter(User):
     class Meta:
         verbose_name = 'Presenter'
 
+
+class Industry(User):
+    class Meta:
+        verbose_name = 'Industry'
 
 class RoleCoefficent(models.Model):
     state = (

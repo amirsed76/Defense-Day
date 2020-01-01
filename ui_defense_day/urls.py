@@ -8,8 +8,11 @@ router = routers.DefaultRouter()
 router.register(r'register/students', views.Students_account)
 router.register(r'register/professor', views.Professor_account)
 router.register(r'register/presenter', views.Presenter_account)
+router.register(r'register/industry', views.Industry_account)
+router.register(r'my_documents', views.Document)
 
 urlpatterns = [
+
     path('', include(router.urls)),
 
 ]
