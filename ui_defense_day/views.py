@@ -49,16 +49,8 @@ class Professor_account(viewsets.ModelViewSet):
 
 
 
-#
-# class SalesmanList(viewsets.ModelViewSet):
-#     serializer_class = serializers.StudentSerializer
-#     queryset = models.Student.objects.all()
-#
-#     def get(self, request, *args, **kwargs):
-#         return self.list(request, *args, **kwargs)
 
-
-class Document(viewsets.ModelViewSet):
+class MyDocument(viewsets.ModelViewSet):
     serializer_class = serializers.DocumentSerializer
     queryset = models.Document.objects.all()
     permission_classes = [permissions.IsPresenter]
@@ -71,19 +63,15 @@ class Document(viewsets.ModelViewSet):
         data=request.data
         data["presenter"]=request.user.id
         print("data",data)
-        serializer = serializers.DocumentWriteSerializer(data=data)
+        serializer = serializers.DocumentSerializer2(data=data)
         serializer.is_valid(raise_exception=True)
         print("_dataaaaaa",data)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
-#
-# class Document(mixins.ListModelMixin,mixins.RetrieveModelMixin , generics.GenericAPIView):
-#     serializer_class = serializers.DocumentSerializer
-#     queryset = models.Document.objects.all()
-#     permission_classes = [permissions.IsAuthenticated]
 
-
-
-
+class Documentviewset(generics.ListAPIView):
+    serializer_class = serializers.DocumentSerializer2
+    queryset = models.Document.objects.all()
+    permission_classes = []

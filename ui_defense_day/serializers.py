@@ -111,9 +111,7 @@ class DocumentSerializer(serializers.ModelSerializer):
     #     document.save()
     #     return document
 
-class DocumentWriteSerializer(DocumentSerializer):
-    presenter = serializers.CharField()
-
+class DocumentSerializer2(DocumentSerializer):
     class Meta:
         model = models.Document
         fields = "__all__"
