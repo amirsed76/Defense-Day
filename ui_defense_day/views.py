@@ -21,7 +21,7 @@ def Register(request):
 
 
 class Industry_account(viewsets.ModelViewSet):
-    queryset = models.Presenter.objects.all()
+    queryset = models.Industry.objects.all()
     serializer_class = serializers.IndustrySerializer
     permission_classes = [IsAdminUser]
 
@@ -59,16 +59,23 @@ class MyDocument(viewsets.ModelViewSet):
         return models.Document.objects.filter(presenter=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        self.serializer_class=serializers.DocumentSerializer
+        # try:
+            # self.serializer_class=serializers.DocumentSerializer
         data=request.data
-        data["presenter"]=request.user.id
         print("data",data)
-        serializer = serializers.DocumentSerializer2(data=data)
+        serializer = serializers.DocumentSerializer(data=data)
         serializer.is_valid(raise_exception=True)
         print("_dataaaaaa",data)
-        self.perform_create(serializer)
+        presenter=models.Presenter.objects.get(id=request.user.id)
+        data["presenter"]=presenter
+        document=models.Document(presenter=data["presenter"], file1=data["file1"],file2=data["file2"])
+        document.save()
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(serializer, status=status.HTTP_201_CREATED, headers=headers)
+        # except:
+        #     return Response( status=status.HTTP_201_CREATED)
+
+        # return Response(serializers.DocumentSerializer2(document).data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class Documentviewset(generics.ListAPIView):

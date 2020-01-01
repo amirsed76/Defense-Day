@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'allauth.account',
     "corsheaders",
+    'rest_framework_swagger',
 ]
 SITE_ID=1
 MIDDLEWARE = [
@@ -78,7 +79,13 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'defense_day.wsgi.application'
-
+SWAGGER_SETTINGS = {
+    'SECURITY_DEFINITIONS': {
+        'basic': {
+            'type': 'basic'
+        }
+    },
+}
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases

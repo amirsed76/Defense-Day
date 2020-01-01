@@ -68,7 +68,7 @@ class IndustrySerializer(serializers.ModelSerializer):
         style={'input_type': 'password', 'placeholder': 'Password'}
     )
     class Meta:
-        model = models.Presenter
+        model = models.Industry
         fields = ["name","username", "password", "phone_number"]
 
     def create(self, validated_data):
@@ -99,7 +99,7 @@ class UserRegisterSerializer(RegisterSerializer):
 
 class DocumentSerializer(serializers.ModelSerializer):
     presenter = serializers.CharField(
-        read_only=True
+        read_only=True,
     )
     class Meta:
         model = models.Document
@@ -116,11 +116,11 @@ class DocumentSerializer2(DocumentSerializer):
         model = models.Document
         fields = "__all__"
 
-    def create(self, validated_data):
-        print("validated_data", validated_data)
-        presenter=models.Presenter.objects.get(id=validated_data["presenter"])
-        document = models.Document(presenter=presenter, file1=validated_data["file1"],
-                                   file2=validated_data["file2"])
-        document.save()
-        return document
+    # def create(self, validated_data):
+    #     print("validated_data", validated_data)
+    #     presenter=models.Presenter.objects.get(id=validated_data["presenter"])
+    #     document = models.Document(presenter=presenter, file1=validated_data["file1"],
+    #                                file2=validated_data["file2"])
+    #     document.save()
+    #     return document
 
