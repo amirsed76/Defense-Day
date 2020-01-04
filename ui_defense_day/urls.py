@@ -9,6 +9,7 @@ router.register(r'register/professor', views.Professor_account)
 router.register(r'register/presenter', views.Presenter_account)
 router.register(r'register/industry', views.Industry_account)
 router.register(r'my_documents', views.MyDocument)
+router.register(r'score', views.ScoreViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

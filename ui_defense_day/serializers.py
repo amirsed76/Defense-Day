@@ -206,3 +206,13 @@ class DocumentSerializer2(DocumentSerializer):
     class Meta:
         model = models.Document
         fields = ["id","file1","file2","presenter","supervisor"]
+
+class ScoreSerializer(serializers.ModelSerializer):
+    user = serializers.CharField(
+        read_only=True,
+    )
+    score=serializers.DecimalField(max_digits=4, decimal_places=2 , max_value=20 , min_value=0)
+
+    class Meta:
+        model = models.Score
+        fields = "__all__"

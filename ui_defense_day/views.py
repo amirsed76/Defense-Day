@@ -60,17 +60,21 @@ class MyDocument(viewsets.ModelViewSet):
         return models.Document.objects.filter(presenter=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        data=request.data
-        print("data",data)
-        serializer = serializers.DocumentSerializer(data=data)
-        serializer.is_valid(raise_exception=True)
-        print("_dataaaaaa",data)
-        presenter=models.Presenter.objects.get(id=request.user.id)
-        data["presenter"]=presenter
-        document=models.Document(presenter=data["presenter"], file1=data["file1"],file2=data["file2"])
-        document.save()
-        headers = self.get_success_headers(serializer.data)
-        return Response(serializer, status=status.HTTP_201_CREATED, headers=headers)
+        try:
+            data=request.data
+            print("data",data)
+            serializer = serializers.DocumentSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            print("_dataaaaaa",data)
+            presenter=models.Presenter.objects.get(id=request.user.id)
+            data["presenter"]=presenter
+            document=models.Document(presenter=data["presenter"], file1=data["file1"],file2=data["file2"])
+            document.save()
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer, status=status.HTTP_201_CREATED, headers=headers)
+        except Exception as e :
+            headers = self.get_exception_handler()
+            return Response(str(e), status=status.HTTP_201_CREATED)
 
 
 class DocumentListView(generics.ListAPIView):
@@ -86,3 +90,29 @@ class ProfessorStudentsDocumentListView(generics.ListAPIView):
 
     def get_queryset(self):
         return models.Document.objects.filter(presenter__supervisor__id=self.request.user.id)
+
+
+class ScoreViewSet(viewsets.ModelViewSet):
+    serializer_class = serializers.ScoreSerializer
+    queryset = models.Score.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return models.Score.objects.filter(user__id=self.request.user.id)
+
+    def create(self, request, *args, **kwargs):
+        try:
+            data=request.data
+            print("data",data)
+            serializer = serializers.ScoreSerializer(data=data)
+            serializer.is_valid(raise_exception=True)
+            print("_dataaaaaa",data)
+            user=models.User.objects.get(id=request.user.id)
+            presenter = models.Presenter.objects.get(id=data["presenter"])
+            score=models.Score(presenter=presenter, user=user,score=data["score"])
+            score.save()
+            headers = self.get_success_headers(serializer.data)
+            return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        except Exception as e :
+            headers = self.get_exception_handler()
+            return Response(str(e), status=status.HTTP_201_CREATED)
