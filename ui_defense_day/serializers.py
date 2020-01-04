@@ -4,12 +4,11 @@ from rest_auth.registration.serializers import RegisterSerializer
 from rest_framework.validators import UniqueForYearValidator
 
 
-
-
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.User
         fields = ["username"]
+
 
 class PresenterSerializer(serializers.ModelSerializer):
     password = serializers.CharField(
@@ -18,15 +17,28 @@ class PresenterSerializer(serializers.ModelSerializer):
         help_text='Leave empty if no change needed',
         style={'input_type': 'password', 'placeholder': 'Password'}
     )
+
     class Meta:
         model = models.Presenter
-        fields = ["name","username","supervisor", "password", "phone_number"]
+        fields = ["id","name", "username", "supervisor", "password", "phone_number"]
 
     def create(self, validated_data):
-
-        presenter= models.Presenter.objects.create_presenter(username=validated_data["username"] , password=validated_data["password"],job="presenter" , phone_number=validated_data["phone_number"] , supervisor=validated_data["supervisor"], name=validated_data["name"])
-        presenter.supervisor=validated_data["supervisor"]
+        presenter = models.Presenter.objects.create_presenter(username=validated_data["username"],
+                                                              password=validated_data["password"], job="presenter",
+                                                              phone_number=validated_data["phone_number"],
+                                                              supervisor=validated_data["supervisor"],
+                                                              name=validated_data["name"])
+        presenter.supervisor = validated_data["supervisor"]
         return presenter
+
+    # def update(self, instance, validated_data):
+    #     presenter = models.Presenter.objects.create_presenter(username=validated_data["username"],
+    #                                                           password=validated_data["password"], job="presenter",
+    #                                                           phone_number=validated_data["phone_number"],
+    #                                                           supervisor=validated_data["supervisor"],
+    #                                                           name=validated_data["name"])
+    #     presenter.supervisor = validated_data["supervisor"]
+    #     return presenter
 
 
 class StudentSerializer(serializers.ModelSerializer):
@@ -36,28 +48,36 @@ class StudentSerializer(serializers.ModelSerializer):
         help_text='Leave empty if no change needed',
         style={'input_type': 'password', 'placeholder': 'Password'}
     )
+
     class Meta:
-        model=models.Student
-        fields = ["name","username","password","phone_number"]
+        model = models.Student
+        fields = ["id","name", "username", "password", "phone_number"]
 
     def create(self, validated_data):
-        return  models.Student.objects.create_user(username=validated_data["username"] , password=validated_data["password"],job="student" , phone_number=validated_data["phone_number"],name=validated_data["name"])
+        return models.Student.objects.create_user(username=validated_data["username"],
+                                                  password=validated_data["password"], job="student",
+                                                  phone_number=validated_data["phone_number"],
+                                                  name=validated_data["name"])
 
 
 class ProfessorSerializer(serializers.ModelSerializer):
-
     password = serializers.CharField(
         write_only=True,
         required=True,
         help_text='Leave empty if no change needed',
         style={'input_type': 'password', 'placeholder': 'Password'}
     )
+
     class Meta:
-        model=models.Student
-        fields = ["name","username","password","phone_number"]
+        model = models.Student
+        fields = ["id","name", "username", "password", "phone_number"]
 
     def create(self, validated_data):
-        return  models.Professor.objects.create_user(username=validated_data["username"] , password=validated_data["password"],job="professor" , phone_number=validated_data["phone_number"],name=validated_data["name"])
+        print("create professor")
+        return models.Professor.objects.create_user(username=validated_data["username"],
+                                                    password=validated_data["password"], job="Professor",
+                                                    phone_number=validated_data["phone_number"],
+                                                    name=validated_data["name"])
 
 
 class IndustrySerializer(serializers.ModelSerializer):
@@ -67,12 +87,16 @@ class IndustrySerializer(serializers.ModelSerializer):
         help_text='Leave empty if no change needed',
         style={'input_type': 'password', 'placeholder': 'Password'}
     )
+
     class Meta:
         model = models.Industry
-        fields = ["name","username", "password", "phone_number"]
+        fields = ["name", "username", "password", "phone_number"]
 
     def create(self, validated_data):
-        return models.Industry.objects.create_user(username=validated_data["username"] , password=validated_data["password"],job="industry" , phone_number=validated_data["phone_number"],name=validated_data["name"] )
+        return models.Industry.objects.create_user(username=validated_data["username"],
+                                                   password=validated_data["password"], job="industry",
+                                                   phone_number=validated_data["phone_number"],
+                                                   name=validated_data["name"])
 
 
 class UserDetailsSerializer(serializers.ModelSerializer):
@@ -101,6 +125,7 @@ class DocumentSerializer(serializers.ModelSerializer):
     presenter = serializers.CharField(
         read_only=True,
     )
+
     class Meta:
         model = models.Document
         fields = "__all__"
@@ -111,10 +136,12 @@ class DocumentSerializer(serializers.ModelSerializer):
     #     document.save()
     #     return document
 
+
 class DocumentSerializer2(DocumentSerializer):
+    supervisor = serializers.CharField(read_only=True, source='presenter.supervisor')
     class Meta:
         model = models.Document
-        fields = "__all__"
+        fields = ["id","file1","file2","presenter","supervisor"]
 
     # def create(self, validated_data):
     #     print("validated_data", validated_data)
@@ -123,4 +150,3 @@ class DocumentSerializer2(DocumentSerializer):
     #                                file2=validated_data["file2"])
     #     document.save()
     #     return document
-

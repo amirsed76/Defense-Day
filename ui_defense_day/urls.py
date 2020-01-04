@@ -12,6 +12,6 @@ router.register(r'my_documents', views.MyDocument)
 
 urlpatterns = [
     path('', include(router.urls)),
-
-    path("documents/",views.Documentviewset.as_view()),
+    path("documents/", views.DocumentListView.as_view()),
+    path("my_presenters/documents",views.ProfessorStudentsDocumentListView.as_view())
 ]

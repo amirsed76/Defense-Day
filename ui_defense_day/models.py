@@ -7,6 +7,7 @@ class UserManager(BaseUserManager):
     use_in_migrations = True
 
     def create_user(self, username, email=None, password=None , job=None ,phone_number=None, name=None):
+        print("job",job)
         user = self.model(
             username=username,
             job=job,
@@ -42,6 +43,18 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    # def update_presenter(self, username,supervisor, email=None, password=None , job=None ,phone_number=None , name=None ):
+    #     print("BBBBBBBB",supervisor)
+    #     user = self.model(
+    #         username=username,
+    #         job=job,
+    #         phone_number=phone_number,
+    #         supervisor=supervisor,
+    #         name=name
+    #     )
+    #     user.set_password(password)
+    #     user.save(using=self._db)
+    #     return user
 
 
 class User(AbstractUser):
@@ -52,7 +65,7 @@ class User(AbstractUser):
     state = (
         ('student', 'Student'),
         ('industry', 'Industry'),
-        ('referee', 'Referee'),
+        ('professor', 'Professor'),
         ('admin','Admin')
 
     )
@@ -106,3 +119,6 @@ class Document(models.Model):
 class Score(models.Model):
     presenter = models.OneToOneField(Presenter , on_delete=models.CASCADE ,null=True , blank=True)
     score = models.DecimalField(max_digits=4 , decimal_places=2)
+
+
+

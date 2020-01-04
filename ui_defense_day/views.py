@@ -35,6 +35,7 @@ class Presenter_account(viewsets.ModelViewSet):
 
 
 
+
 class Students_account(viewsets.ModelViewSet):
     serializer_class = serializers.StudentSerializer
     queryset = models.Student.objects.all()
@@ -59,8 +60,6 @@ class MyDocument(viewsets.ModelViewSet):
         return models.Document.objects.filter(presenter=self.request.user)
 
     def create(self, request, *args, **kwargs):
-        # try:
-            # self.serializer_class=serializers.DocumentSerializer
         data=request.data
         print("data",data)
         serializer = serializers.DocumentSerializer(data=data)
@@ -72,13 +71,18 @@ class MyDocument(viewsets.ModelViewSet):
         document.save()
         headers = self.get_success_headers(serializer.data)
         return Response(serializer, status=status.HTTP_201_CREATED, headers=headers)
-        # except:
-        #     return Response( status=status.HTTP_201_CREATED)
-
-        # return Response(serializers.DocumentSerializer2(document).data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class Documentviewset(generics.ListAPIView):
+class DocumentListView(generics.ListAPIView):
     serializer_class = serializers.DocumentSerializer2
     queryset = models.Document.objects.all()
     permission_classes = []
+
+
+class ProfessorStudentsDocumentListView(generics.ListAPIView):
+    serializer_class = serializers.DocumentSerializer2
+    queryset = models.Document.objects.all()
+    permission_classes = [permissions.Isprofessor]
+
+    def get_queryset(self):
+        return models.Document.objects.filter(presenter__supervisor__id=self.request.user.id)

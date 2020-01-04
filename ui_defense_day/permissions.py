@@ -19,3 +19,10 @@ class IsLogin(BasePermission):
     def has_permission(self, request, view):
         return bool(request.user)
 
+class Isprofessor(BasePermission):
+    """
+    Allows access only to authenticated Presenter.
+    """
+    def has_permission(self, request, view):
+        return bool(request.user and request.user.job == "professor")
+
