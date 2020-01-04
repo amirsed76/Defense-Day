@@ -37,8 +37,8 @@ class Presenter_account(viewsets.ModelViewSet):
 
 
 class Students_account(viewsets.ModelViewSet):
-    serializer_class = serializers.StudentSerializer
     queryset = models.Student.objects.all()
+    serializer_class = serializers.StudentSerializer
     permission_classes = [IsAdminUser]
 
 

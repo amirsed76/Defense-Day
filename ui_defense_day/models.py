@@ -1,13 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser,BaseUserManager
+from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
 
-class UserManager(BaseUserManager):
 
+class UserManager(BaseUserManager):
     use_in_migrations = True
 
-    def create_user(self, username, email=None, password=None , job=None ,phone_number=None, name=None):
-        print("job",job)
+    def create_user(self, username, email=None, password=None, job=None, phone_number=None, name=None):
+        print("job", job)
         user = self.model(
             username=username,
             job=job,
@@ -18,8 +18,8 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_presenter(self, username,supervisor, email=None, password=None , job=None ,phone_number=None , name=None ):
-        print("BBBBBBBB",supervisor)
+    def create_presenter(self, username, supervisor, email=None, password=None, job=None, phone_number=None, name=None):
+        print("BBBBBBBB", supervisor)
         user = self.model(
             username=username,
             job=job,
@@ -43,35 +43,23 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    # def update_presenter(self, username,supervisor, email=None, password=None , job=None ,phone_number=None , name=None ):
-    #     print("BBBBBBBB",supervisor)
-    #     user = self.model(
-    #         username=username,
-    #         job=job,
-    #         phone_number=phone_number,
-    #         supervisor=supervisor,
-    #         name=name
-    #     )
-    #     user.set_password(password)
-    #     user.save(using=self._db)
-    #     return user
-
 
 class User(AbstractUser):
-    username = models.CharField(max_length=50, unique=True )
+    username = models.CharField(max_length=50, unique=True)
     USERNAME_FIELD = 'username'
     objects = UserManager()
-    phone_number=models.CharField(max_length=11 , null=True , blank=True)
+    phone_number = models.CharField(max_length=11, null=True, blank=True)
     state = (
         ('student', 'Student'),
         ('industry', 'Industry'),
         ('professor', 'Professor'),
-        ('admin','Admin')
+        ('admin', 'Admin')
 
     )
-    job=models.CharField(max_length=11,choices=state,default="student" , null=True , blank=True)
-    name=models.CharField(max_length=100, null=True , blank=True )
+    job = models.CharField(max_length=11, choices=state, default="student", null=True, blank=True)
+    name = models.CharField(max_length=100, null=True, blank=True)
     REQUIRED_FIELDS = []
+
     def __str__(self):
         return '({})'.format(self.username)
 
@@ -90,7 +78,8 @@ class Student(User):
 
 
 class Presenter(User):
-    supervisor = models.ForeignKey(Professor , related_name="SupervisorProfessor", on_delete=models.CASCADE)
+    supervisor = models.ForeignKey(Professor, related_name="SupervisorProfessor", on_delete=models.CASCADE)
+
     class Meta:
         verbose_name = 'Presenter'
 
@@ -98,6 +87,7 @@ class Presenter(User):
 class Industry(User):
     class Meta:
         verbose_name = 'Industry'
+
 
 class RoleCoefficent(models.Model):
     state = (
@@ -112,13 +102,11 @@ class RoleCoefficent(models.Model):
 
 
 class Document(models.Model):
-    presenter = models.OneToOneField(Presenter , on_delete=models.CASCADE)
-    file1=models.FileField(upload_to="document/",null=True , blank=True)
-    file2=models.FileField(upload_to="document/",null=True , blank=True)
+    presenter = models.OneToOneField(Presenter, on_delete=models.CASCADE)
+    file1 = models.FileField(upload_to="document/", null=True, blank=True)
+    file2 = models.FileField(upload_to="document/", null=True, blank=True)
+
 
 class Score(models.Model):
-    presenter = models.OneToOneField(Presenter , on_delete=models.CASCADE ,null=True , blank=True)
-    score = models.DecimalField(max_digits=4 , decimal_places=2)
-
-
-
+    presenter = models.OneToOneField(Presenter, on_delete=models.CASCADE, null=True, blank=True)
+    score = models.DecimalField(max_digits=4, decimal_places=2)
