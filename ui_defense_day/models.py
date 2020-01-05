@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
 from django.contrib.auth.hashers import make_password
+from django_jalali.db import models as jmodels
 
 
 class UserManager(BaseUserManager):
@@ -53,6 +54,7 @@ class User(AbstractUser):
         ('student', 'Student'),
         ('industry', 'Industry'),
         ('professor', 'Professor'),
+        ('presenter', 'Presenter'),
         ('admin', 'Admin')
 
     )
@@ -94,12 +96,15 @@ class RoleCoefficent(models.Model):
         ('student', 'Student'),
         ('industry', 'Industry'),
         ('supervisor', 'Supervisor'),
-        ('referee', 'Referee'),
+        ('professor', 'Professor'),
+        ('admin', 'Admin')
 
     )
-    job = models.CharField(max_length=20, choices=state)
+    job = models.CharField(max_length=20, choices=state , unique=True)
     coefficent = models.IntegerField()
 
+    def __str__(self):
+        return self.job
 
 class Document(models.Model):
     presenter = models.OneToOneField(Presenter, on_delete=models.CASCADE)
@@ -114,3 +119,7 @@ class Score(models.Model):
 
     class Meta:
         unique_together = ('user', 'presenter',)
+
+class Event(models.Model):
+    start_date = models.DateField()
+    end_date = models.DateField()

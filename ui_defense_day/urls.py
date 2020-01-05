@@ -14,5 +14,9 @@ router.register(r'score', views.ScoreViewSet)
 urlpatterns = [
     path('', include(router.urls)),
     path("documents/", views.DocumentListView.as_view()),
-    path("my_presenters/documents",views.ProfessorStudentsDocumentListView.as_view())
+    path("my_presenters/", views.ProfessorPresenters.as_view()),
+    path("my_presenters/documents",views.ProfessorStudentsDocumentListView.as_view()),
+    path("presenter_scores/", views.ScoreListview.as_view()),
+    path("my_presenters/averages/", views.ProfessorStudentsAverageListView.as_view()),
+    path("averages/", views.AverageScoreListView.as_view()),
 ]

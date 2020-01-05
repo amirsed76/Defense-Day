@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     'allauth.account',
     "corsheaders",
     'rest_framework_swagger',
+    'jalali_date',
+
 ]
 SITE_ID=1
 MIDDLEWARE = [
@@ -168,5 +170,25 @@ REST_FRAMEWORK = {
     #     'rest_framework.permissions.IsAuthenticated',
     # ),
     'DEFAULT_PAGINATION_CLASS':
-        'rest_framework.pagination.LimitOffsetPagination'
+        'rest_framework.pagination.LimitOffsetPagination',
+}
+
+JALALI_DATE_DEFAULTS = {
+   'Strftime': {
+        'date': '%y/%m/%d',
+        'datetime': '%H:%M:%S _ %y/%m/%d',
+    },
+    'Static': {
+        'js': [
+            # loading default jQuery
+            'admin/jquery.ui.datepicker.jalali/scripts/jquery-1.10.2.min.js',
+            # loading datepicker
+            'admin/js/django_jalali.min.js',
+        ],
+        'css': {
+            'all': [
+                'admin/jquery.ui.datepicker.jalali/themes/base/jquery-ui.min.css',
+            ]
+        }
+    },
 }

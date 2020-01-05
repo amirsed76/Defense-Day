@@ -106,7 +106,7 @@ class ProfessorSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         print("create professor")
         return models.Professor.objects.create_user(username=validated_data["username"],
-                                                    password=validated_data["password"], job="Professor",
+                                                    password=validated_data["password"], job="professor",
                                                     phone_number=validated_data["phone_number"],
                                                     name=validated_data["name"])
     def update(self, instance, validated_data):
@@ -211,8 +211,48 @@ class ScoreSerializer(serializers.ModelSerializer):
     user = serializers.CharField(
         read_only=True,
     )
+    supervisor = serializers.CharField(read_only=True, source='presenter.supervisor')
+    presenter_username = serializers.CharField(read_only=True, source='presenter.username')
+
     score=serializers.DecimalField(max_digits=4, decimal_places=2 , max_value=20 , min_value=0)
 
     class Meta:
         model = models.Score
-        fields = "__all__"
+        fields = ["id","presenter","user","supervisor","presenter_username" , "score"]
+
+
+class Average(serializers.ModelSerializer):
+    average_score = serializers.SerializerMethodField()
+    supervisor = serializers.CharField(read_only=True, source='presenter.supervisor')
+    presenter_username = serializers.CharField(read_only=True, source='presenter.username')
+    class Meta:
+        fields = ["id","presenter","average_score","supervisor","presenter_username"]
+        model = models.Score
+    def get_average_score(self, obj):
+        presenter_scores=models.Score.objects.filter(presenter_id=obj.presenter.id )
+        scores=[]
+        sum_coefficent=0
+        for p_score in presenter_scores:
+            if p_score.user.job in ["admin","student","industry"]:
+                job = p_score.user.job
+            elif p_score.user.job=="presenter":
+                job = "student"
+            elif p_score.user.id == obj.presenter.supervisor.id:
+                job = "supervisor"
+            else :
+                job = "professor"
+            try:
+
+                coefficent=models.RoleCoefficent.objects.get(job=job).coefficent
+                scores.append(p_score.score * coefficent )
+                sum_coefficent += coefficent
+                print("__________")
+                print("p_score_user", p_score.user)
+                print("p_score presenter", p_score.presenter)
+                print("coefficent",coefficent)
+                print("score",p_score.score)
+            except:
+                return None
+        return sum(scores)/sum_coefficent
+
+
