@@ -145,6 +145,7 @@ REST_REGISTRATION = {
     'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
 }
 
+STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static'), )
 
 AUTH_USER_MODEL = 'ui_defense_day.User'
 
