@@ -24,6 +24,7 @@ SECRET_KEY = '77g-4rhc#a%54ai6b-9aynxjr$zpr8zs4-!le@c&@3z(7smyfy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+CORS_ORIGIN_ALLOW_ALL = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -49,7 +50,6 @@ INSTALLED_APPS = [
     "corsheaders",
     'rest_framework_swagger',
     'jalali_date',
-
 ]
 SITE_ID=1
 MIDDLEWARE = [
@@ -60,6 +60,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
 ]
 
 ROOT_URLCONF = 'defense_day.urls'
@@ -145,7 +147,7 @@ REST_REGISTRATION = {
     'REGISTER_EMAIL_VERIFICATION_ENABLED': False,
 }
 
-STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static'), )
+STATICFILES_DIRS = ( os.path.join(BASE_DIR, 'static2'), )
 
 AUTH_USER_MODEL = 'ui_defense_day.User'
 
